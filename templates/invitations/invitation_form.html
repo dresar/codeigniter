@@ -1,0 +1,250 @@
+{% extends 'invitations/base.html' %}
+
+{% block title %}{{ title }} - Invitation App{% endblock %}
+
+{% block header_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 lg:p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-4 lg:p-8">
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Template Selection -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-palette text-purple-500"></i> Pilih Template
+                    </h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Template Undangan</label>
+                        {{ form.template }}
+                        <p class="mt-2 text-sm text-gray-500">
+                            Pilih template untuk undangan Anda. 
+                            <a href="{% url 'invitation_templates:template_list' %}" target="_blank" class="text-purple-600 hover:underline">
+                                <i class="fas fa-external-link-alt"></i> Kelola Template
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Detail Pasangan -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-heart text-pink-500"></i> Detail Pasangan
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Mempelai Pria</label>
+                            {{ form.groom_name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Mempelai Wanita</label>
+                            {{ form.bride_name }}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Orang Tua</label>
+                        {{ form.parents_text }}
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Instagram Username</label>
+                        {{ form.instagram_username }}
+                    </div>
+                </div>
+
+                <!-- Acara Akad -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-mosque text-purple-500"></i> Acara Akad
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                            {{ form.akad_date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Waktu</label>
+                            {{ form.akad_time }}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                        {{ form.akad_location }}
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Google Maps Link</label>
+                        {{ form.akad_maps_link }}
+                    </div>
+                </div>
+
+                <!-- Acara Resepsi -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-utensils text-pink-500"></i> Acara Resepsi
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                            {{ form.resepsi_date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Waktu</label>
+                            {{ form.resepsi_time }}
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                        {{ form.resepsi_location }}
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Google Maps Link</label>
+                        {{ form.resepsi_maps_link }}
+                    </div>
+                </div>
+
+                <!-- Konten -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-book text-purple-500"></i> Konten
+                    </h3>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Our Story</label>
+                        {{ form.our_story }}
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Save the Date Image</label>
+                        {{ form.save_the_date_image }}
+                    </div>
+                </div>
+
+                <!-- Wedding Gift -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-gift text-pink-500"></i> Wedding Gift
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening</label>
+                            {{ form.gift_account_number }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pemilik</label>
+                            {{ form.gift_account_name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Bank</label>
+                            {{ form.gift_bank_name }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Published -->
+                <div class="flex items-center space-x-2">
+                    {{ form.is_published }}
+                    <label class="text-sm font-medium text-gray-700">Publish undangan</label>
+                </div>
+
+                <div class="flex space-x-4 pt-6">
+                    <button type="submit" 
+                            class="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                    <a href="{% url 'invitations:dashboard' %}" 
+                       class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                        Batal
+                    </a>
+                </div>
+            </form>
+
+            {% if invitation %}
+                <!-- Gallery Management -->
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-images text-purple-500"></i> Gallery
+                        </h3>
+                        <a href="{% url 'invitations:gallery_add' invitation.pk %}" 
+                           class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                            <i class="fas fa-plus"></i> Tambah Foto
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {% for gallery in galleries %}
+                            <div class="relative group">
+                                <img src="{{ gallery.image.url }}" alt="{{ gallery.caption }}" 
+                                     class="w-full h-32 object-cover rounded-lg">
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center">
+                                    <a href="{% url 'invitations:gallery_delete' gallery.pk %}" 
+                                       class="opacity-0 group-hover:opacity-100 text-white bg-red-500 px-3 py-1 rounded">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Guest Management -->
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-users text-pink-500"></i> Guest Management
+                        </h3>
+                        <a href="{% url 'invitations:guest_add' invitation.pk %}" 
+                           class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors">
+                            <i class="fas fa-plus"></i> Tambah Guest
+                        </a>
+                    </div>
+                    <div class="space-y-2">
+                        {% for guest in guests %}
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <p class="font-medium">{{ guest.name }}</p>
+                                    <p class="text-sm text-gray-500">
+                                        <a href="{{ guest.get_guest_url }}" target="_blank" class="text-purple-600 hover:underline">
+                                            {{ guest.get_guest_url }}
+                                        </a>
+                                    </p>
+                                </div>
+                                <a href="{% url 'invitations:guest_delete' guest.pk %}" 
+                                   class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- RSVP List -->
+                <div class="mt-8 border-t border-gray-200 pt-8">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-clipboard-check text-green-500"></i> RSVP Responses
+                    </h3>
+                    <div class="space-y-2">
+                        {% for rsvp in rsvps %}
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-medium">{{ rsvp.guest_name }}</p>
+                                        <p class="text-sm text-gray-500">{{ rsvp.email }} | {{ rsvp.phone }}</p>
+                                        <p class="text-sm mt-1">{{ rsvp.message }}</p>
+                                    </div>
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full 
+                                        {% if rsvp.status == 'attending' %}bg-green-100 text-green-800
+                                        {% elif rsvp.status == 'not_attending' %}bg-red-100 text-red-800
+                                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                        {{ rsvp.get_status_display }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

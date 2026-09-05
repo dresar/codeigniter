@@ -1,0 +1,41 @@
+:root {
+    --vd-color-pink: #e9088a;
+}
+
+.scrolled {
+    background: #fff !important;
+    transition: all 1s ease-in-out;
+    box-shadow: 3px 0px 15px 15px rgba(89, 89, 89, 0.2);
+    visibility: visible !important;
+    pointer-events: all !important;
+}
+
+.scrolled .logo-viding path {
+    fill: var(--vd-color-pink);
+}
+
+.navbar-hide {
+    top: -70px;
+}
+
+.logo-viding {
+    height: 2.4rem;
+}
+
+@media (max-width: 767px) {
+    .logo-viding {
+        height: 1.75rem;
+    }
+}
+
+.logo-viding path {
+    fill: var(--vd-color-pink);
+}
+
+button * {
+    margin-bottom: 0 !important;
+}
+
+nav .container > .position-absolute{
+    z-index: 10;
+}

@@ -1,0 +1,215 @@
+{% extends 'invitations/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - Invitation App{% endblock %}
+
+{% block header_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 lg:p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-lg p-4 lg:p-8">
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Template *</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.description.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-file-code text-purple-500"></i> File Template
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <!-- HTML File -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                File HTML Template * 
+                                <span class="text-xs text-gray-500">(Akan disimpan di templates/invited/, TIDAK di media)</span>
+                            </label>
+                            {{ form.html_file }}
+                            {% if form.html_file.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.html_file.errors.0 }}</p>
+                            {% endif %}
+                            {% if template and template.html_filename %}
+                                <p class="mt-2 text-sm text-gray-500">
+                                    File saat ini: <strong>{{ template.html_filename }}</strong> (di templates/invited/)
+                                </p>
+                            {% endif %}
+                            {{ form.html_filename }}
+                        </div>
+
+                        <!-- Multiple CSS Files -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                File CSS (Multiple) 
+                                <span class="text-xs text-gray-500">(Akan di-rename menjadi style1.css, style2.css, dll - disimpan di static/templates/css/, TIDAK di media)</span>
+                            </label>
+                            {{ form.css_files }}
+                            {% if form.css_files.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.css_files.errors.0 }}</p>
+                            {% endif %}
+                            <p class="mt-1 text-xs text-gray-500">{{ form.css_files.help_text }}</p>
+                            
+                            <!-- List existing CSS files -->
+                            {% if template and css_files %}
+                                <div class="mt-3 space-y-2">
+                                    <p class="text-sm font-medium text-gray-700">CSS Files yang sudah ada:</p>
+                                    {% for css in css_files %}
+                                        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fas fa-file-code text-purple-500"></i>
+                                                <span class="text-sm">{{ css.get_filename }}</span>
+                                                <span class="text-xs text-gray-500">({{ css.css_file.size|filesizeformat }})</span>
+                                            </div>
+                                            <a href="{% url 'invitation_templates:delete_css_file' css.pk %}" 
+                                               class="text-red-500 hover:text-red-700 text-sm"
+                                               onclick="return confirm('Hapus file ini?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Multiple JS Files -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                File JavaScript (Multiple) 
+                                <span class="text-xs text-gray-500">(Akan di-rename menjadi script1.js, script2.js, dll - disimpan di static/templates/js/, TIDAK di media)</span>
+                            </label>
+                            {{ form.js_files }}
+                            {% if form.js_files.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.js_files.errors.0 }}</p>
+                            {% endif %}
+                            <p class="mt-1 text-xs text-gray-500">{{ form.js_files.help_text }}</p>
+                            
+                            <!-- List existing JS files -->
+                            {% if template and js_files %}
+                                <div class="mt-3 space-y-2">
+                                    <p class="text-sm font-medium text-gray-700">JS Files yang sudah ada:</p>
+                                    {% for js in js_files %}
+                                        <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fas fa-file-code text-green-500"></i>
+                                                <span class="text-sm">{{ js.get_filename }}</span>
+                                                <span class="text-xs text-gray-500">({{ js.js_file.size|filesizeformat }})</span>
+                                            </div>
+                                            <a href="{% url 'invitation_templates:delete_js_file' js.pk %}" 
+                                               class="text-red-500 hover:text-red-700 text-sm"
+                                               onclick="return confirm('Hapus file ini?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Multiple Image Files -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                File Image (Multiple) 
+                                <span class="text-xs text-gray-500">(Akan disimpan dengan nama asli di media/templates/images/)</span>
+                            </label>
+                            {{ form.image_files }}
+                            {% if form.image_files.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.image_files.errors.0 }}</p>
+                            {% endif %}
+                            <p class="mt-1 text-xs text-gray-500">{{ form.image_files.help_text }}</p>
+                            
+                            <!-- List existing images -->
+                            {% if template and images %}
+                                <div class="mt-3 space-y-2">
+                                    <p class="text-sm font-medium text-gray-700">Images yang sudah ada:</p>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        {% for img in images %}
+                                            <div class="relative group">
+                                                <img src="{{ img.image.url }}" alt="Image {{ img.order }}" 
+                                                     class="w-full h-24 object-cover rounded-lg">
+                                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all rounded-lg flex items-center justify-center">
+                                                    <a href="{% url 'invitation_templates:delete_image_file' img.pk %}" 
+                                                       class="opacity-0 group-hover:opacity-100 text-white bg-red-500 px-2 py-1 rounded text-xs"
+                                                       onclick="return confirm('Hapus image ini?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Preview Image -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preview Image</label>
+                            {{ form.preview_image }}
+                            {% if form.preview_image.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ form.preview_image.errors.0 }}</p>
+                            {% endif %}
+                            {% if template and template.preview_image %}
+                                <div class="mt-2">
+                                    <img src="{{ template.preview_image.url }}" alt="Preview" class="w-32 h-32 object-cover rounded-lg">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-6 space-y-4">
+                    <div class="flex items-center space-x-2">
+                        {{ form.is_active }}
+                        <label class="text-sm font-medium text-gray-700">Aktifkan template</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        {{ form.is_default }}
+                        <label class="text-sm font-medium text-gray-700">Jadikan template default</label>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-900 mb-2">
+                        <i class="fas fa-info-circle"></i> Petunjuk Upload Template
+                    </h4>
+                    <ul class="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                        <li>File HTML harus menggunakan variabel Django template seperti: <code class="bg-blue-100 px-1 rounded">{% verbatim %}{{ invitation.groom_name }}{% endverbatim %}</code></li>
+                        <li>File HTML akan disimpan di folder <code class="bg-blue-100 px-1 rounded">templates/invited/</code> (TIDAK di media)</li>
+                        <li>File CSS akan di-rename otomatis menjadi <code class="bg-blue-100 px-1 rounded">style1.css</code>, <code class="bg-blue-100 px-1 rounded">style2.css</code>, dll dan disimpan di <code class="bg-blue-100 px-1 rounded">static/templates/css/</code> (TIDAK di media)</li>
+                        <li>File JS akan di-rename otomatis menjadi <code class="bg-blue-100 px-1 rounded">script1.js</code>, <code class="bg-blue-100 px-1 rounded">script2.js</code>, dll dan disimpan di <code class="bg-blue-100 px-1 rounded">static/templates/js/</code> (TIDAK di media)</li>
+                        <li>File Images disimpan di <code class="bg-blue-100 px-1 rounded">media/templates/images/</code> (hanya images di media)</li>
+                        <li>Di template HTML, gunakan <code class="bg-blue-100 px-1 rounded">{% verbatim %}{% load static %}{% endverbatim %}</code> dan <code class="bg-blue-100 px-1 rounded">{% verbatim %}{% static 'templates/css/template-slug/style1.css' %}{% endverbatim %}</code></li>
+                        <li>Gunakan context variables: <code class="bg-blue-100 px-1 rounded">invitation</code>, <code class="bg-blue-100 px-1 rounded">galleries</code>, <code class="bg-blue-100 px-1 rounded">rsvp_form</code>, <code class="bg-blue-100 px-1 rounded">guest_name</code></li>
+                    </ul>
+                </div>
+
+                <div class="flex space-x-4 pt-6">
+                    <button type="submit" 
+                            class="flex-1 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg">
+                        <i class="fas fa-save"></i> Simpan Template
+                    </button>
+                    <a href="{% url 'invitation_templates:template_list' %}" 
+                       class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                        Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
